@@ -108,6 +108,107 @@
 ### 36. What are the core types of OOP?
 **Answer:** Encapsulation, Inheritance, Polymorphism, Abstraction. Others include: constructor, destructor, static, traits, namespaces, magic methods.
 
+### 36. How to order a specific record (e.g., India) first and others after in Laravel?
+**Answer:** Use: orderByRaw("name = 'India' DESC")->orderBy('name', 'DESC')
+
+### 37. How do you get the top 3 selling products using Eloquent?
+**Answer:** Product::orderBy('sales_count', 'DESC')->take(3)->get();
+
+### 38. How to fetch users who don’t have any posts using Eloquent?
+**Answer:** User::doesntHave('posts')->get();
+
+### 39. How to select the latest record per group (e.g., latest order per customer)?
+**Answer:** Use subqueries or Laravel 8+ selectRaw with join on max(id) per group.
+
+### 40. How to join two tables and get records even if no match exists?
+**Answer:** Use leftJoin: DB::table('users')->leftJoin('orders', 'users.id', '=', 'orders.user_id')->get();
+
+### 41. How to write a dynamic where condition in Laravel only if a parameter is present?
+**Answer:** Use when(): ->when($filter, fn($q) => $q->where('status', $filter))
+
+### 42. How to filter records between two dates using Eloquent?
+**Answer:** Model::whereBetween('created_at', [$from, $to])->get();
+
+### 43. How to write a subquery in Laravel's Eloquent or Query Builder?
+**Answer:** Use addSelect with DB::raw() or subQuery inside closure
+
+### 44. How to paginate an Eloquent result and keep query parameters?
+**Answer:** $models = Model::paginate(10)->withQueryString();
+
+### 45. How to eager load a relationship with conditions?
+**Answer:** Model::with(['comments' => fn($q) => $q->where('status', 'active')])->get();
+
+### 46. How to pass multiple variables to all views without using compact every time?
+**Answer:** Use view()->share('key', $value) in a service provider like AppServiceProvider.
+
+### 47. How to show different layouts based on user role in Blade?
+**Answer:** Use @if(auth()->user()->isAdmin()) @include('layouts.admin') @else @include('layouts.user') @endif
+
+### 48. What is the difference between @include, @component, and @yield in Blade?
+**Answer:** @include inserts a partial; @component allows slot passing; @yield defines a section to be filled by @section.
+
+### 49. How to use loops and conditionals in Blade to generate a dynamic menu?
+**Answer:** Use @foreach and @if with a menu array: @foreach($menu as $item) <li>{{ $item['title'] }}</li> @endforeach
+
+### 50. How to define a route with optional parameters?
+**Answer:** Route::get('/user/{id?}', fn($id = null) => ...);
+
+### 51. How to handle route model binding with a different column (e.g., slug)?
+**Answer:** Route::get('/post/{post:slug}', [PostController::class, 'show']);
+
+### 52. How to create a RESTful controller and what are the 7 default methods?
+**Answer:** Use php artisan make:controller --resource; Methods: index, create, store, show, edit, update, destroy
+
+### 53. How to create a grouped route with a common prefix and middleware?
+**Answer:** Route::prefix('admin')->middleware('auth')->group(function() { Route::get('/dashboard', ...); });
+
+### 54. How to create a middleware to block access on weekends?
+**Answer:** Create custom middleware, check Carbon::now()->isWeekend() and return abort(403)
+
+### 55. How to share authenticated user data across all controllers?
+**Answer:** Use view()->share('user', auth()->user()) in a service provider or middleware.
+
+### 56. How to validate request input based on condition?
+**Answer:** Use sometimes or required_if: 'field_a' => 'required_if:field_b,yes'
+
+### 57. How to authorize a request using policy in controller method?
+**Answer:** Use $this->authorize('update', $post); inside the controller
+
+### 58. What is the difference between hasOne and belongsTo?
+**Answer:** hasOne is defined on the parent model, belongsTo is defined on the child referencing the parent’s key.
+
+### 59. How to define a many-to-many relationship with additional pivot columns?
+**Answer:** Define with ->withPivot('column_name') in the relationship method and use belongsToMany.
+
+### 60. How to use withCount() and withSum() in Eloquent?
+**Answer:** Use Model::withCount('relation')->withSum('relation', 'amount')->get();
+
+### 61. How to eager load nested relationships (e.g., posts → comments → user)?
+**Answer:** Use Model::with('posts.comments.user')->get();
+
+### 62. How to cache an Eloquent query and invalidate it after a new record is created?
+**Answer:** Use Cache::remember() and clear it on model events like created/updated.
+
+### 63. How to upload a file and store it in a specific folder with a custom name?
+**Answer:** $path = $request->file('image')->storeAs('images', 'custom_name.jpg');
+
+### 64. How to build an API response using Resource classes?
+**Answer:** Use return new UserResource($user); or return UserResource::collection($users);
+
+### 65. How to queue an email and send it in the background?
+**Answer:** Use Mail::to($user)->queue(new WelcomeMail($user)); and configure queue driver.
+
+### 66. How to broadcast real-time notifications using Laravel Echo & Pusher?
+**Answer:** Create event implements ShouldBroadcast, configure broadcasting.php and use Echo on frontend.
+
+### 67. How to write a job that retries 3 times and then fails gracefully?
+**Answer:** Set public $tries = 3; and handle failure in failed() method in the job class.
+
+### 68. How to use custom validation rules (e.g., check if a date is a working day)?
+**Answer:** Create a custom Rule class using php artisan make:rule WorkingDay and define logic in passes().
+
+### 69. How to trigger an event after a user is created and log the data?
+**Answer:** Dispatch event in User::created() model event or controller and handle it in a listener.
 
 ---
 
